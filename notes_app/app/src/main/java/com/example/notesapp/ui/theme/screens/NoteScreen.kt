@@ -155,7 +155,7 @@ fun NoteScreen(
                     placeholder = { Text("Title") },
 
                     textStyle = TextStyle(
-                        fontSize = 24.sp,
+                        fontSize = 18.sp,
                         fontWeight = FontWeight.Bold,
                         fontFamily = FontFamily.Serif,
                         ),
@@ -189,8 +189,8 @@ fun NoteScreen(
                     onValueChange = { content = it },
                     placeholder = { Text("Note...") },
                     textStyle = TextStyle(
-                        fontSize = 22.sp,
-                        fontWeight = FontWeight.Medium,
+                        fontSize = 16.sp,
+                        fontWeight = FontWeight.Normal,
                         fontFamily = FontFamily.Serif
                     ),
 
@@ -247,11 +247,13 @@ fun NoteScreen(
                         ),
 
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black
+                        containerColor = Color.Black,
+
                     ),
 
                     ) {
-                    Text(if (currentEditing == null) "Add Note" else "Update Note")
+                    Text(if (currentEditing == null) "Add Note" else "Update Note",
+                        color = Color.White)
                 }
             }
         }

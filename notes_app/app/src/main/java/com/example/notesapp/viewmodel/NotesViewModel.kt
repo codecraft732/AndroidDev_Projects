@@ -13,9 +13,6 @@ class NotesViewModel (private val repository: NoteRepository):  ViewModel(){
 
 
 //Suspend function should be called only from a coroutine
-
-
-
     fun addNote(title:String, content: String) = viewModelScope.launch{
         val color = ColorUtil.getRandomColor()
         repository.addNote(NotesData(title= title, content = content , color = color))
