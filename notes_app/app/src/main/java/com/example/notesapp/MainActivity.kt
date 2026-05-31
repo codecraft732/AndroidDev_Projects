@@ -46,6 +46,7 @@ class MainActivity : ComponentActivity() {
                             // navigate to blank NoteScreen
                             editingNote = null
                             selectedNote = NotesData(id = 0, title = "", content = "", color = ColorUtil.getRandomColor() )
+
                         },
                         onOpenNote = { note ->
                             selectedNote = note
@@ -61,7 +62,7 @@ class MainActivity : ComponentActivity() {
                         onDoneEditing = {
                             editingNote= null
                         },
-                        onBack = { selectedNote= null },
+                        onBack = { selectedNote = null },
 
                             onDelete = { note ->
                             viewModel.deleteNote(note)

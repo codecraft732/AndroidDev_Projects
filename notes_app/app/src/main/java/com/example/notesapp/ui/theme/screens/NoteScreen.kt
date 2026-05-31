@@ -234,6 +234,7 @@ fun NoteScreen(
                                 currentEditing = null
                                 isEditing = false
                             }
+                            //this means to clear feild after add or update
                             title = ""
                             content = ""
                         }
