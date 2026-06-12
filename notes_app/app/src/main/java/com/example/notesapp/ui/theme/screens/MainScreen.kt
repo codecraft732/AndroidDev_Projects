@@ -44,7 +44,7 @@ fun ColumnCards(
         modifier = Modifier
             .fillMaxWidth()
             .padding(cardPadding)
-            .heightIn(min = if (screenWidth > 600.dp) 180.dp else 130.dp) // Increased height
+            .heightIn(min = if (screenWidth > 600.dp) 180.dp else 130.dp)
             .clickable { onClick() },
         shape = RoundedCornerShape(cardCornerRadius),
         colors = CardDefaults.cardColors(containerColor = color),
