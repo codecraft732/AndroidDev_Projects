@@ -18,7 +18,7 @@ fun MainWeatherCard(weather: WeatherModel) {
     val screenHeight = configuration.screenHeightDp.dp
     val screenWidth = configuration.screenWidthDp.dp
 
-    // Responsive Dimensions
+
     val cardHeight = screenHeight * 0.35f           // 35% of screen height
     val responsivePadding = screenWidth * 0.08f      // 8% of screen width
     val emojiSize = (screenHeight.value * 0.08).sp // 8% of screen height value as font size

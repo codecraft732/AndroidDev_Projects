@@ -1,29 +1,18 @@
 package com.example.weatherapp.presentation.screen.forecast.components
 
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
+
+import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
-import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.Text
+import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Alignment
-import androidx.compose.ui.Modifier
+import androidx.compose.ui.*
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.compose.ui.unit.*
 import com.example.weatherapp.data.dto.getcurrentweather.WeatherModel
 import java.text.SimpleDateFormat
-import java.util.Date
-import java.util.Locale
+import java.util.*
 
 @Composable
 fun SunTimeCard(weather: WeatherModel, modifier: Modifier = Modifier) {
@@ -31,7 +20,7 @@ fun SunTimeCard(weather: WeatherModel, modifier: Modifier = Modifier) {
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
 
-    // Responsive Dimensions
+
     val responsivePadding = screenWidth * 0.06f // 6% of screen width
     val labelSize = (screenHeight.value * 0.018).sp // Dynamic label size
     val timeSize = (screenHeight.value * 0.022).sp  // Dynamic time size

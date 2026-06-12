@@ -8,35 +8,34 @@ import io.ktor.client.call.body
 import io.ktor.client.engine.cio.CIO
 import io.ktor.client.plugins.contentnegotiation.ContentNegotiation
 import io.ktor.client.plugins.logging.*
-import io.ktor.client.request.get
-import io.ktor.client.request.parameter
+import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
 
 class WeatherRepository {
-// http send network request
+    // http send network request
     private val client = HttpClient(CIO) {
 //       ContentNegotiation  convert api response from Json to object
-    install(ContentNegotiation) {
+        install(ContentNegotiation) {
 
-        json(Json {
-            ignoreUnknownKeys = true
-            isLenient = true
-            prettyPrint = true
+            json(Json {
+                ignoreUnknownKeys = true
+                isLenient = true
+                prettyPrint = true
+            }
+            )
         }
-        )
-    }
 
-    install(Logging) {
-      logger = Logger.Companion.DEFAULT
-      level = LogLevel.INFO  //  show URL, headers, status code
+        install(Logging) {
+            logger = Logger.Companion.DEFAULT
+            level = LogLevel.INFO  //  show URL, headers, status code
+        }
     }
-}
 
     private val API_KEY = BuildConfig.WeatherAPI_KEY
     private val BASE_URL = BuildConfig.WEATHER_BASE_URL
 
-//suspend = this function run in coroutine (background thread)
+    //suspend = this function run in coroutine (background thread)
     suspend fun getCurrentWeather(city: String): Result<WeatherModel> { //Result<WeatherModel> = Success Failure return
 
         return try {

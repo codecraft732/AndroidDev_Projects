@@ -1,23 +1,13 @@
 package com.example.weatherapp.presentation.screen.weatherscreen
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.runtime.Composable
-import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.foundation.layout.*
+import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Brush
-import androidx.compose.ui.graphics.Color
-import com.example.weatherapp.presentation.WeatherUiState
-import com.example.weatherapp.presentation.WeatherViewModel
+import androidx.compose.ui.graphics.*
+import com.example.weatherapp.presentation.*
 import com.example.weatherapp.presentation.screen.weather.WeatherContent
-import com.example.weatherapp.presentation.screen.weatherscreen.component.ErrorScreen
-import com.example.weatherapp.presentation.screen.weatherscreen.component.LoadingScreen
-import com.example.weatherapp.presentation.screen.weatherscreen.component.ShowDialogue
+import com.example.weatherapp.presentation.screen.weatherscreen.component.*
 
 @Composable
 fun WeatherScreen(viewModel: WeatherViewModel) {

@@ -1,11 +1,9 @@
 package com.example.weatherapp.presentation
 
 import android.util.Log
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.weatherapp.data.dto.WeatherRepository
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 
 class WeatherViewModel(val repository: WeatherRepository = WeatherRepository()) : ViewModel() {

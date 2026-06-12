@@ -1,10 +1,10 @@
 package com.example.weatherapp.presentation.screen.weather
 
-import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.*
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.material.icons.*
+import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.*
 import androidx.compose.runtime.Composable
@@ -14,14 +14,14 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
-import com.example.weatherapp.data.dto.forcastmodel.*
+import com.example.weatherapp.data.dto.forcastmodel.ForecastItem
 import com.example.weatherapp.data.dto.getcurrentweather.WeatherModel
+import com.example.weatherapp.presentation.screen.forecast.*
 import com.example.weatherapp.presentation.screen.forecast.components.SunTimeCard
-import com.example.weatherapp.presentation.screen.forecast.ForecastSection
-import com.example.weatherapp.presentation.screen.weather.component.MainWeatherCard
-import com.example.weatherapp.presentation.screen.weather.component.WeatherDetailGrid
+import com.example.weatherapp.presentation.screen.weather.component.*
 import java.text.SimpleDateFormat
-import java.util.*
+import java.util.Date
+import java.util.Locale
 
 
 @Composable
@@ -34,7 +34,7 @@ fun WeatherContent(
     val screenWidth = configuration.screenWidthDp.dp
     val screenHeight = configuration.screenHeightDp.dp
     val iconSize = screenWidth * 0.12f // Responsive icon button size
-    
+
     // Responsive spacing between sections (3% of screen height)
     val sectionSpacing = screenHeight * 0.03f
 
@@ -80,7 +80,7 @@ fun WeatherContent(
                 )
             }
         }
-        
+
         Text(
             text = getCurrentDate(),
             color = Color.White.copy(0.8f),
@@ -91,12 +91,12 @@ fun WeatherContent(
 
         WeatherDetailGrid(weather)
 
-        if(forecast.isNotEmpty()){
+        if (forecast.isNotEmpty()) {
             ForecastSection(forecast)
         }
 
         SunTimeCard(weather)
-        
+
         // Extra padding at bottom for better scrolling experience
         Spacer(modifier = Modifier.height(16.dp))
     }
