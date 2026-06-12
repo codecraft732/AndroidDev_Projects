@@ -10,7 +10,7 @@ import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
@@ -29,8 +29,6 @@ fun NoteScreen(
     onBack: () -> Unit,
     onDelete: (NotesData) -> Unit
 ) {
-
-
     var isEditing by rememberSaveable { mutableStateOf(true) }
     var title by rememberSaveable { mutableStateOf("") }
     var content by rememberSaveable { mutableStateOf("") }
@@ -41,63 +39,58 @@ fun NoteScreen(
             currentEditing = editingNote
             title = editingNote.title
             content = editingNote.content
-            isEditing = false   // only read mode by default
+            isEditing = false
             onDoneEditing()
-
         }
     }
 
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val screenWidth = maxWidth
+        
+        // Responsive variables based on screen width
+        val horizontalPadding = if (screenWidth > 600.dp) 48.dp else 16.dp
+        val titleFontSize = if (screenWidth > 600.dp) 24.sp else 18.sp
+        val contentFontSize = if (screenWidth > 600.dp) 18.sp else 16.sp
+        val buttonHeight = if (screenWidth > 600.dp) 52.dp else 44.dp
+        val maxColumnWidth = if (screenWidth > 1200.dp) 900.dp else 750.dp
+        val topBarIconSize = if (screenWidth > 600.dp) 40.dp else 32.dp
 
-    Column(
-        modifier = Modifier.fillMaxSize()
-    )
-    {
         Scaffold(
-
             containerColor = Color.Transparent,
             topBar = {
-
                 TopAppBar(
                     colors = TopAppBarDefaults.topAppBarColors(
                         containerColor = Color.Transparent
                     ),
-                    modifier = Modifier.statusBarsPadding(),
                     title = {},
                     navigationIcon = {
                         Icon(
                             imageVector = Icons.Default.ArrowBack,
-                            contentDescription = "",
+                            contentDescription = "Back",
                             tint = Color.Black,
                             modifier = Modifier
-                                .padding(horizontal = 18.dp)
-                                .size(28.dp)
+                                .padding(horizontal = horizontalPadding)
+                                .size(topBarIconSize)
                                 .background(
-                                    color = Color.LightGray,
-                                    shape = RoundedCornerShape(8.dp)
+                                    color = Color.LightGray.copy(alpha = 0.5f),
+                                    shape = RoundedCornerShape(12.dp)
                                 )
-                                .padding(horizontal = 4.dp)
-                                .clickable {
-                                    onBack()
-                                }
+                                .padding(if (screenWidth > 600.dp) 10.dp else 8.dp)
+                                .clickable { onBack() }
                         )
                     },
-
                     actions = {
                         var expanded by remember { mutableStateOf(false) }
-
-                        Box {
+                        Box(modifier = Modifier.padding(horizontal = horizontalPadding)) {
                             Icon(
                                 imageVector = Icons.Default.MoreVert,
                                 contentDescription = "More options",
                                 modifier = Modifier
-                                    .padding(horizontal = 16.dp)
+                                    .size(if (screenWidth > 600.dp) 32.dp else 24.dp)
                                     .clickable(
                                         indication = null,
                                         interactionSource = remember { MutableInteractionSource() }
-                                    ) {
-                                        expanded = true
-                                    }
-                                    .size(24.dp)
+                                    ) { expanded = true }
                             )
 
                             DropdownMenu(
@@ -130,7 +123,6 @@ fun NoteScreen(
                                             modifier = Modifier.size(20.dp)
                                         )
                                     },
-
                                     onClick = {
                                         expanded = false
                                         isEditing = true
@@ -139,125 +131,118 @@ fun NoteScreen(
                             }
                         }
                     }
-
                 )
-            }) { innerPadding ->
-            Column(
+            }
+        ) { innerPadding ->
+            Box(
                 modifier = Modifier
-                    .padding(innerPadding)
+                    .fillMaxSize()
+                    .padding(innerPadding),
+                contentAlignment = Alignment.TopCenter
             ) {
-
-
-                OutlinedTextField(
-                    value = title,
-                    onValueChange = { title = it },
-
-                    placeholder = { Text("Title") },
-
-                    textStyle = TextStyle(
-                        fontSize = 18.sp,
-                        fontWeight = FontWeight.Bold,
-                        fontFamily = FontFamily.Serif,
+                Column(
+                    modifier = Modifier
+                        .fillMaxHeight()
+                        .widthIn(max = maxColumnWidth)
+                        .padding(horizontal = horizontalPadding)
+                ) {
+                    OutlinedTextField(
+                        value = title,
+                        onValueChange = { title = it },
+                        placeholder = { Text("Title", fontSize = titleFontSize) },
+                        textStyle = TextStyle(
+                            fontSize = titleFontSize,
+                            fontWeight = FontWeight.Bold,
+                            fontFamily = FontFamily.Serif,
                         ),
-
-                    modifier = Modifier
-                        .padding(18.dp)
-                        .fillMaxWidth(),
-                    readOnly = !isEditing,
-                    colors = TextFieldDefaults.colors(
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        focusedPlaceholderColor = Color.DarkGray,
-                        unfocusedPlaceholderColor = Color.DarkGray,
-                        cursorColor = Color.Black,
-                        focusedIndicatorColor = Color.Black,
-                        unfocusedIndicatorColor = Color.Black
-                    )
-                )
-
-                HorizontalDivider(
-                    thickness = 1.dp,
-                    color = Color.DarkGray,
-                    modifier = Modifier.padding(horizontal = 28.dp)
-                )
-
-                OutlinedTextField(
-
-                    value = content,
-                    onValueChange = { content = it },
-                    placeholder = { Text("Note...") },
-                    textStyle = TextStyle(
-                        fontSize = 16.sp,
-                        fontWeight = FontWeight.Normal,
-                        fontFamily = FontFamily.Serif
-                    ),
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .weight(1f)
-                        .padding(18.dp)
-                        .verticalScroll(rememberScrollState()),
-                    readOnly = !isEditing,
-                    colors = TextFieldDefaults.colors(
-                        focusedTextColor = Color.Black,
-                        unfocusedTextColor = Color.Black,
-                        focusedPlaceholderColor = Color.DarkGray,
-                        unfocusedPlaceholderColor = Color.DarkGray,
-                        cursorColor = Color.Black,
-                        focusedContainerColor = Color.Transparent,
-                        unfocusedContainerColor = Color.Transparent,
-                        focusedIndicatorColor = Color.Black,
-                        unfocusedIndicatorColor = Color.Black
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = if (screenWidth > 600.dp) 24.dp else 16.dp),
+                        readOnly = !isEditing,
+                        colors = TextFieldDefaults.colors(
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedPlaceholderColor = Color.Gray,
+                            unfocusedPlaceholderColor = Color.Gray,
+                            cursorColor = Color.Black,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        )
                     )
 
+                    HorizontalDivider(
+                        thickness = 1.dp,
+                        color = Color.LightGray.copy(alpha = 0.5f)
+                    )
 
-                )
+                    OutlinedTextField(
+                        value = content,
+                        onValueChange = { content = it },
+                        placeholder = { Text("Note...", fontSize = contentFontSize) },
+                        textStyle = TextStyle(
+                            fontSize = contentFontSize,
+                            fontWeight = FontWeight.Normal,
+                            fontFamily = FontFamily.Serif,
+                            lineHeight = if (screenWidth > 600.dp) 28.sp else 24.sp
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .weight(1f)
+                            .padding(vertical = 16.dp)
+                            .verticalScroll(rememberScrollState()),
+                        readOnly = !isEditing,
+                        colors = TextFieldDefaults.colors(
+                            focusedTextColor = Color.Black,
+                            unfocusedTextColor = Color.Black,
+                            focusedPlaceholderColor = Color.Gray,
+                            unfocusedPlaceholderColor = Color.Gray,
+                            cursorColor = Color.Black,
+                            focusedContainerColor = Color.Transparent,
+                            unfocusedContainerColor = Color.Transparent,
+                            focusedIndicatorColor = Color.Transparent,
+                            unfocusedIndicatorColor = Color.Transparent
+                        )
+                    )
 
-
-
-                Button(
-                    onClick = {
-                        if (title.isNotEmpty() && content.isNotEmpty()) {
-
-                            if (currentEditing == null) {
-
-                                viewModel.addNote(title, content)
-
-                            } else {
-                                viewModel.updateNote(
-                                    currentEditing!!.copy(
-                                        title = title, content = content
+                    Button(
+                        onClick = {
+                            if (title.isNotEmpty() || content.isNotEmpty()) {
+                                if (currentEditing == null) {
+                                    viewModel.addNote(title, content)
+                                } else {
+                                    viewModel.updateNote(
+                                        currentEditing!!.copy(
+                                            title = title, content = content
+                                        )
                                     )
-                                )
-                                currentEditing = null
-                                isEditing = false
+                                    currentEditing = null
+                                    isEditing = false
+                                }
+                                title = ""
+                                content = ""
+                                onBack()
                             }
-                            //this means to clear feild after add or update
-                            title = ""
-                            content = ""
-                        }
-                    },
-
-                    modifier = Modifier
-                        .fillMaxWidth()
-                        .padding(16.dp)
-                        .background(
-                            color = Color.Black, shape = RoundedCornerShape(1.dp)
+                        },
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(vertical = if (screenWidth > 600.dp) 32.dp else 16.dp)
+                            .height(buttonHeight),
+                        shape = RoundedCornerShape(12.dp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = Color.Black,
                         ),
-
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = Color.Black,
-
-                    ),
-
                     ) {
-                    Text(if (currentEditing == null) "Add Note" else "Update Note",
-                        color = Color.White)
+                        Text(
+                            text = if (currentEditing == null) "Add Note" else "Update Note",
+                            color = Color.White,
+                            fontSize = if (screenWidth > 600.dp) 16.sp else 14.sp,
+                            fontWeight = FontWeight.SemiBold
+                        )
+                    }
                 }
             }
         }
     }
 }
-

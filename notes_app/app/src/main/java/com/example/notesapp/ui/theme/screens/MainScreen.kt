@@ -3,25 +3,19 @@ package com.example.notesapp.ui.theme.screens
 
 import androidx.compose.foundation.*
 import androidx.compose.foundation.layout.*
-import androidx.compose.foundation.lazy.staggeredgrid.LazyVerticalStaggeredGrid
-import androidx.compose.foundation.lazy.staggeredgrid.items
+import androidx.compose.foundation.lazy.staggeredgrid.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.Add
-import androidx.compose.foundation.lazy.staggeredgrid.StaggeredGridCells
-import androidx.compose.material.icons.filled.Search
+import androidx.compose.foundation.text.BasicTextField
+import androidx.compose.material.icons.*
+import androidx.compose.material.icons.filled.*
 import androidx.compose.material3.*
-import androidx.compose.material3.SegmentedButtonDefaults.borderStroke
 import androidx.compose.runtime.*
 import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.ui.*
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.*
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.font.*
 import androidx.compose.ui.text.style.TextOverflow
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.*
 import com.example.notesapp.data.local.NotesData
 import com.example.notesapp.viewmodel.NotesViewModel
@@ -34,42 +28,29 @@ import java.util.Locale
 fun ColumnCards(
     note: NotesData,
     color: Color,
+    screenWidth: Dp,
     onClick: () -> Unit,
     content: @Composable () -> Unit
 ) {
-
-
     val hasTitle = note.title.isNotBlank()
     val hasContent = note.content.isNotBlank()
 
     if (!hasTitle && !hasContent) return
-    Column(
+
+    val cardPadding = if (screenWidth > 600.dp) 2.dp else 1.dp
+    val cardCornerRadius = if (screenWidth > 600.dp) 16.dp else 12.dp
+
+    Card(
         modifier = Modifier
-            .fillMaxSize()
-            .padding(2.dp),
-        verticalArrangement = Arrangement.Top,
-        horizontalAlignment = Alignment.Start
+            .fillMaxWidth()
+            .padding(cardPadding)
+            .heightIn(min = if (screenWidth > 600.dp) 180.dp else 130.dp) // Increased height
+            .clickable { onClick() },
+        shape = RoundedCornerShape(cardCornerRadius),
+        colors = CardDefaults.cardColors(containerColor = color),
+        elevation = CardDefaults.cardElevation(defaultElevation = 2.dp)
     ) {
-        Card(
-            modifier = Modifier
-                .fillMaxWidth()
-
-                .padding(2.dp)
-                .clickable {
-                    onClick()
-                }
-
-                .background(
-                    color = Color.Transparent,
-                    shape = RoundedCornerShape(
-                        38.dp
-                    )
-                ),
-            colors = CardDefaults.cardColors(containerColor = color)
-
-        ) {
-            content()
-        }
+        content()
     }
 }
 
@@ -81,13 +62,10 @@ fun MainScreen(
     onCreateNote: () -> Unit,
     onOpenNote: (NotesData) -> Unit,
 ) {
-
     var search by rememberSaveable { mutableStateOf("") }
     val sdf = SimpleDateFormat("dd MMM yyyy, hh:mm a", Locale.getDefault())
     val notesState by viewModel.notes.collectAsState()
 
-
-//     notesState is now a plain List<NotesData>, so .filter works correctly
     val filteredNotes = remember(notesState, search) {
         if (search.isBlank()) notesState
         else notesState.filter { note ->
@@ -96,141 +74,113 @@ fun MainScreen(
         }
     }
 
+    BoxWithConstraints(modifier = Modifier.fillMaxSize()) {
+        val screenWidth = maxWidth
 
-    Scaffold(
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-                    onCreateNote()
+        val horizontalPadding = if (screenWidth > 600.dp) 28.dp else 12.dp
+        val gridCellsMinSize = if (screenWidth > 600.dp) 200.dp else 160.dp
+        val contentMaxWidth = if (screenWidth > 1200.dp) 1100.dp else 900.dp
+        val fabSize = if (screenWidth > 600.dp) 70.dp else 62.dp
+        val fabIconSize = if (screenWidth > 600.dp) 30.dp else 25.dp
+        val searchBarVerticalPadding = if (screenWidth > 600.dp) 16.dp else 12.dp
 
-                },
-                containerColor = Color.Black,
-                contentColor = Color.White,
-                shape = RoundedCornerShape(12.dp),
-                modifier = Modifier.size(62.dp)
-            ) {
-                Icon(
-                    imageVector = Icons.Default.Add,
-                    contentDescription = "",
-                    tint = Color.White,
-                    modifier = Modifier.size(30.dp)
-                )
-            }
-        }
-
-    ) { innerPadding ->
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Top
-
-        ) {
-
-            TextField(
-                value = search,
-                onValueChange = { search = it },
-
-                placeholder = { Text("Search Notes") },
-
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.dp),
-
-                textStyle = TextStyle(
-                    fontSize = 18.sp,
-                    fontWeight = FontWeight.Bold
-                ),
-                leadingIcon = {
-
+        Scaffold(
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = onCreateNote,
+                    containerColor = Color.Black,
+                    contentColor = Color.White,
+                    shape = RoundedCornerShape(16.dp),
+                    modifier = Modifier.size(fabSize)
+                ) {
                     Icon(
-                        imageVector = Icons.Default.Search,
-                        contentDescription = " ",
+                        imageVector = Icons.Default.Add,
+                        contentDescription = "Add Note",
                         tint = Color.White,
-                        modifier = Modifier.size(18.dp)
+                        modifier = Modifier.size(fabIconSize)
                     )
-
-                },
-
-                shape = RoundedCornerShape(24.dp),
-                singleLine = true,
-
-                colors = TextFieldDefaults.colors(
-                    focusedContainerColor = Color.Black,
-                    unfocusedContainerColor = Color.Black,
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.White,
-                    unfocusedIndicatorColor = Color.Transparent,
-                    focusedIndicatorColor = Color.Transparent,
-                    focusedPlaceholderColor = Color.White,
-                    unfocusedPlaceholderColor = Color.White,
-                    unfocusedLeadingIconColor = Color.White,
-                    focusedLeadingIconColor = Color.White
-                )
-            )
-            LazyVerticalStaggeredGrid(
-                columns = StaggeredGridCells.Fixed(2),
+                }
+            }
+        ) { innerPadding ->
+            Box(
                 modifier = Modifier
                     .fillMaxSize()
-                    .padding(horizontal = 16.dp),
-                verticalItemSpacing = 8.dp,
-                horizontalArrangement = Arrangement.spacedBy(8.dp)
+                    .padding(innerPadding),
+                contentAlignment = Alignment.TopCenter
             ) {
+                Column(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .widthIn(max = contentMaxWidth),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Top
+                ) {
 
-                items(filteredNotes, key = { note -> note.id }) { note ->
+                    val searchBarHeight = if (screenWidth > 600.dp) 48.dp else 44.dp
+                    val searchFontSize = if (screenWidth > 600.dp) 15.sp else 14.sp
 
-                    val hasTitle = note.title.isNotBlank()
-                    val hasContent = note.content.isNotBlank()
-                    ColumnCards(
-                        note = note,
-                        onClick = {
-                            onOpenNote(
-                                note
+                    BasicTextField(
+                        value = search,
+                        onValueChange = { search = it },
+                        textStyle = TextStyle(
+                            color = Color.White,
+                            fontSize = searchFontSize,
+                            fontWeight = FontWeight.Bold
+                        ),
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .padding(
+                                horizontal = horizontalPadding,
+                                vertical = searchBarVerticalPadding
                             )
-                        },
-                        color = Color(note.color)
+                            .height(searchBarHeight),
+                        singleLine = true,
+                        cursorBrush = SolidColor(Color.White),
+                        decorationBox = { innerTextField ->
+                            Row(
+                                modifier = Modifier
+                                    .background(Color.Black, RoundedCornerShape(16.dp))
+                                    .padding(horizontal = 16.dp),
+                                verticalAlignment = Alignment.CenterVertically
+                            ) {
+                                Icon(
+                                    imageVector = Icons.Default.Search,
+                                    contentDescription = "Search",
+                                    tint = Color.White,
+                                    modifier = Modifier.size(if (screenWidth > 600.dp) 20.dp else 18.dp)
+                                )
+                                Spacer(modifier = Modifier.width(8.dp))
+                                Box(modifier = Modifier.weight(1f)) {
+                                    if (search.isEmpty()) {
+                                        Text(
+                                            text = "Search Notes",
+                                            color = Color.White.copy(alpha = 0.7f),
+                                            fontSize = searchFontSize
+                                        )
+                                    }
+                                    innerTextField()
+                                }
+                            }
+                        }
+                    )
+
+                    LazyVerticalStaggeredGrid(
+                        columns = StaggeredGridCells.Adaptive(minSize = gridCellsMinSize),
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .padding(horizontal = horizontalPadding),
+                        verticalItemSpacing = if (screenWidth > 600.dp) 14.dp else 8.dp,
+                        horizontalArrangement = Arrangement.spacedBy(if (screenWidth > 600.dp) 16.dp else 8.dp),
+                        contentPadding = PaddingValues(bottom = fabSize + 32.dp)
                     ) {
-                        Column(
-                            modifier = Modifier
-                                .fillMaxSize()
-                                .padding(16.dp)
-                        ) {
-
-                            Text(
-                                "Created: ${sdf.format(Date(note.timestamp))}",
-                                style = MaterialTheme.typography.labelSmall
-                            )
-
-                            if (hasTitle) {
-                                Text(
-                                    text = note.title,
-                                    style = MaterialTheme.typography.titleMedium,
-                                    fontFamily = FontFamily.SansSerif,
-                                    maxLines = 3,
-                                    modifier = Modifier.padding(12.dp),
-                                    overflow = TextOverflow.Ellipsis
-
-                                )
-                            }
-                            if (hasTitle && hasContent) {
-                                HorizontalDivider(
-                                    thickness = 1.dp,
-                                    color = Color.DarkGray,
-                                    modifier = Modifier.padding(horizontal = 14.dp)
-                                )
-                            }
-
-                            if (hasContent) {
-                                Text(
-                                    text = note.content.ifBlank { "Empty note" },
-                                    style = MaterialTheme.typography.bodySmall,
-                                    fontFamily = FontFamily.SansSerif,
-                                    maxLines = 10,
-                                    modifier = Modifier.padding(18.dp),
-                                    overflow = TextOverflow.Ellipsis
-
-                                )
+                        items(filteredNotes, key = { note -> note.id }) { note ->
+                            ColumnCards(
+                                note = note,
+                                color = Color(note.color),
+                                screenWidth = screenWidth,
+                                onClick = { onOpenNote(note) }
+                            ) {
+                                NoteItemContent(note, sdf, screenWidth)
                             }
                         }
                     }
@@ -240,3 +190,59 @@ fun MainScreen(
     }
 }
 
+@Composable
+fun NoteItemContent(note: NotesData, sdf: SimpleDateFormat, screenWidth: Dp) {
+    val hasTitle = note.title.isNotBlank()
+    val hasContent = note.content.isNotBlank()
+
+    val itemPadding = if (screenWidth > 600.dp) 32.dp else 24.dp
+    val titleFontSize = if (screenWidth > 600.dp) 18.sp else 16.sp
+    val contentFontSize = if (screenWidth > 600.dp) 14.sp else 13.sp
+    val contentMaxLines = if (screenWidth > 1200.dp) 20 else if (screenWidth > 600.dp) 18 else 12
+
+    Column(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(itemPadding)
+    ) {
+        Text(
+            text = "Created: ${sdf.format(Date(note.timestamp))}",
+            style = MaterialTheme.typography.labelSmall.copy(
+                fontSize = if (screenWidth > 600.dp) 13.sp else 11.sp
+            ),
+            color = Color.White.copy(alpha = 0.8f)
+        )
+
+        if (hasTitle) {
+            Text(
+                text = note.title,
+                style = TextStyle(
+                    fontSize = titleFontSize,
+                    fontWeight = FontWeight.Bold,
+                    fontFamily = FontFamily.SansSerif
+                ),
+                maxLines = 2,
+                modifier = Modifier.padding(top = 8.dp),
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+
+        if (hasTitle && hasContent) {
+            Spacer(modifier = Modifier.height(12.dp))
+        }
+
+        if (hasContent) {
+            Text(
+                text = note.content,
+                style = TextStyle(
+                    fontSize = contentFontSize,
+                    fontFamily = FontFamily.SansSerif,
+                    fontWeight = FontWeight.Normal
+                ),
+                maxLines = contentMaxLines,
+                modifier = Modifier.padding(top = if (hasTitle) 5.dp else 8.dp),
+                overflow = TextOverflow.Ellipsis
+            )
+        }
+    }
+}

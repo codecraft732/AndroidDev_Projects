@@ -1,6 +1,8 @@
 package com.example.notesapp
 
 
+import android.R
+import android.content.Intent
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -25,6 +27,25 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             NotesAppTheme {
+
+                /*
+                 " when other app share anything this app supports to open that app
+                  like option for multiple apps who support that app content"
+
+                 <intent-filter>
+                <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                */
+
+                val action = intent.action
+                val type = intent.type
+                if(action == Intent.ACTION_SEND && type == "text/plain") {
+
+                    val subject = intent.getStringExtra(Intent.EXTRA_SUBJECT)
+                    val text = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    Toast.makeText(this, "${ subject} ${text}", Toast.LENGTH_SHORT).show()
+                }
+
                 val db = NotesDatabase.getDatabase(this)
                 val repository = NoteRepository(db.NoteDao())
                 val factory = object : ViewModelProvider.Factory {

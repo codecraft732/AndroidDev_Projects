@@ -18,6 +18,17 @@ Store = Database
 
 
 
+❌ Tight coupling
+Kotlin
+Activity directly database se data le rahi hai
+👉 Agar database change ho → app break
+
+✅ Loose coupling
+Kotlin
+Activity → Repository → Database
+👉 Activity ko nahi pata data kahan se aa raha hai
+Sirf “data chahiye” ka kaam karti hai
+
 
 
 
