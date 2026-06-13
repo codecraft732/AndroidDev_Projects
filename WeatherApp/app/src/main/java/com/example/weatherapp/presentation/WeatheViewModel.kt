@@ -3,10 +3,13 @@ package com.example.weatherapp.presentation
 import android.util.Log
 import androidx.lifecycle.*
 import com.example.weatherapp.data.dto.WeatherRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class WeatherViewModel(val repository: WeatherRepository = WeatherRepository()) : ViewModel() {
+@HiltViewModel
+class WeatherViewModel @Inject constructor(val repository: WeatherRepository ) : ViewModel() {
     private val _uiState = MutableStateFlow<WeatherUiState>(WeatherUiState.Loading)
 
     //    val uiState: StateFlow<WeatherUiState> = _uiState

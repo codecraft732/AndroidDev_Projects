@@ -8,7 +8,9 @@ import androidx.activity.viewModels
 import com.example.weatherapp.presentation.WeatherViewModel
 import com.example.weatherapp.presentation.screen.weatherscreen.WeatherScreen
 import com.example.weatherapp.ui.theme.WeatherAppTheme
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         val weatherViewModel: WeatherViewModel by viewModels()

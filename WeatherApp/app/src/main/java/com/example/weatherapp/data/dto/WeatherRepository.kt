@@ -11,26 +11,10 @@ import io.ktor.client.plugins.logging.*
 import io.ktor.client.request.*
 import io.ktor.serialization.kotlinx.json.json
 import kotlinx.serialization.json.Json
+import javax.inject.Singleton
 
-class WeatherRepository {
-    // http send network request
-    private val client = HttpClient(CIO) {
-//       ContentNegotiation  convert api response from Json to object
-        install(ContentNegotiation) {
-
-            json(Json {
-                ignoreUnknownKeys = true
-                isLenient = true
-                prettyPrint = true
-            }
-            )
-        }
-
-        install(Logging) {
-            logger = Logger.Companion.DEFAULT
-            level = LogLevel.INFO  //  show URL, headers, status code
-        }
-    }
+@Singleton
+class WeatherRepository( private val client : HttpClient){
 
     private val API_KEY = BuildConfig.WeatherAPI_KEY
     private val BASE_URL = BuildConfig.WEATHER_BASE_URL
