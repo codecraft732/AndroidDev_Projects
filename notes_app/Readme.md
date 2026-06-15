@@ -57,10 +57,10 @@ com.example.notesapp
 
 
 ## 📸 Screenshots
-https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img1.png
-https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img2.png
-https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img3.png
-
+![img1.jpeg](app/src/main/res/drawable/img1.jpeg)
+![img2.jpeg](app/src/main/res/drawable/img2.jpeg)
+![img3.jpeg](app/src/main/res/drawable/img3.jpeg)
+ 
 ## 🌟 Topics Covered in this Project
 
 - **Jetpack Compose** (LazyVerticalStaggeredGrid, BoxWithConstraints, Scaffold)
