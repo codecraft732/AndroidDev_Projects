@@ -57,10 +57,10 @@ com.example.notesapp
 
 
 ## 📸 Screenshots
+![Main](https://raw.githubusercontent.com/alishbaimran/quiz-app/main/images/img1.png)
+![Main](https://raw.githubusercontent.com/alishbaimran/quiz-app/main/images/img2.png)
+![Main](https://raw.githubusercontent.com/alishbaimran/quiz-app/main/images/img3.png)
 
-![Main](https://raw.githubusercontent.com/username/repo/main/main/images/img1.png)
-![Main](https://raw.githubusercontent.com/username/repo/main/main/images/img2.png)
-![Main](https://raw.githubusercontent.com/username/repo/main/main/images/img3.png)
 
 ## 🌟 Topics Covered in this Project
 
