@@ -57,9 +57,11 @@ com.example.notesapp
 
 
 ## 📸 Screenshots
-![img1.jpeg](app/src/main/res/drawable/img1.jpeg)
-![img2.jpeg](app/src/main/res/drawable/img2.jpeg)
-![img3.jpeg](app/src/main/res/drawable/img3.jpeg)
+<p align="center">
+  <img src="app/src/main/res/drawable/img1.jpeg" width="180">
+  <img src="app/src/main/res/drawable/img2.jpeg" width="180">
+  <img src="app/src/main/res/drawable/img3.jpeg" width="180">
+</p>
  
 ## 🌟 Topics Covered in this Project
 
