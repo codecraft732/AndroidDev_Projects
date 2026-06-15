@@ -57,9 +57,9 @@ com.example.notesapp
 
 
 ## 📸 Screenshots
-https://raw.githubusercontent.com/yourname/notes_app/main/app/src/main/res/drawable/img1.png
-https://raw.githubusercontent.com/yourname/notes_app/main/app/src/main/res/drawable/img2.png
-https://raw.githubusercontent.com/yourname/notes_app/main/app/src/main/res/drawable/img3.png
+https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img1.png
+https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img2.png
+https://raw.githubusercontent.com/codecraft732/notes_app/main/app/src/main/res/drawable/img3.png
 
 ## 🌟 Topics Covered in this Project
 
