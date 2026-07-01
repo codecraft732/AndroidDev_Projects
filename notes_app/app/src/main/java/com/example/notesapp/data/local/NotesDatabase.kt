@@ -33,11 +33,9 @@ abstract class NotesDatabase: RoomDatabase(){
             return INSTANCE ?: synchronized(this) {  //  If INSTANCE exists: return it
                 // -> Else: create new database -> Thread locking ONE thread database create
 
-
                 Room.databaseBuilder(
                     context.applicationContext,//Application level context.->
                     // Why not activity context? activity destroy memory leak -> Application context app lifetime stays
-
 
                     NotesDatabase::class.java,
                     "note_db"

@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.example.notesapp"
-        compileSdk = 36
+    compileSdk = 36
 
 
     defaultConfig {
@@ -57,12 +57,10 @@ dependencies {
 //     icon dependency
     implementation("androidx.compose.material:material-icons-extended")
 //  Room Database
-
-
     implementation("androidx.room:room-runtime:2.8.4")
     ksp("androidx.room:room-compiler:2.8.4")
     implementation("androidx.room:room-ktx:2.8.4")
-    // Lifecycles only (without ViewModel or LiveData)
+// Lifecycles only (without ViewModel or LiveData)
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:2.10.0")
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.8.0")
 // Lifecycle utilities for Compose

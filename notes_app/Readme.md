@@ -73,4 +73,143 @@ com.example.notesapp
 - **Kotlin Coroutines** for background tasks
 
 
+## Flow comp how the code work
+  use app inspection to see sqlite database
 
+dataclass -> dao crud operations add -> notedatabase -> repository -> viewmodel
+
+
+
+## IMP CONCEPTS OR KEYWORDS
+Entity → Table
+DAO → Queries
+Database → Connection Manager
+Repository → Clean Access Layer
+ViewModel → UI State
+UI → Screen
+
+Customer = ViewModel
+Manager = Repository
+Worker = DAO
+Store = Database
+
+
+❌ Tight coupling
+Kotlin
+Activity directly database se data le rahi hai
+👉 Agar database change ho → app break
+
+✅ Loose coupling
+Kotlin
+Activity → Repository → Database
+👉 Activity ko nahi pata data kahan se aa raha hai
+Sirf “data chahiye” ka kaam karti hai
+
+
+
+
+## >>>>>viewmodel file explain<<<<<<<<<
+
+.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), emptyList())
+
+.stateIn(viewmodelscope)
+when ViewModel destroy:
+ViewModel Cleared -> Coroutine Cancel -> Flow Stop -> Memory leak avoid
+
+SharingStarted.WhileSubscribed()
+>> flow active until any ui observed
+>> Screen Open->Collect Start
+>> Screen Close->Collect Stop
+>>  Battery & resources save
+
+emptyList()
+before getting data from Database
+notes.value -> contains:[] ..(empty list)
+
+after
+
+[
+Note1,
+Note2,
+Note3
+]
+
+
+
+##  Migration in database comp concept explained
+notes database sqlLite queries code concept explained also migration
+
+migration use if we add data like in future will add color or time currect just title or data so
+when we add new update in data
+so to save the previous data of users we use migration for updated versions
+
+1, 2     2,3    3,4
+ROOM DATABASE MIGRATION (Version 2 to 3)
+Migration is used to update the database structure without deleting existing user data.
+
+val migration = object : Migration(2, 3) {
+override fun migrate(db: SupportSQLiteDatabase) {
+
+    db.execSQL(
+        "ALTER TABLE notes ADD COLUMN color INTEGER NOT NULL DEFAULT 0"
+    )
+
+    db.execSQL(
+        "ALTER TABLE notes ADD COLUMN timestamp INTEGER NOT NULL DEFAULT 0"
+    )
+
+    db.execSQL(
+        "UPDATE notes SET timestamp = strftime('%s','now') WHERE timestamp = 0"
+    )
+}
+}
+
+
+1. Migration (2, 3)
+
+* This means database is upgrading from version 2 to version 3.
+* Room will automatically run this when app updates.
+
+
+2. Add COLOR column
+   SQL:
+   ALTER TABLE notes ADD COLUMN color INTEGER NOT NULL DEFAULT 0
+
+* Adds a new column called "color"
+* Type is INTEGER (number)
+* NOT NULL means value cannot be empty
+* DEFAULT 0 means old notes will get value 0 automatically
+
+
+3. Add TIMESTAMP column
+   SQL:
+   ALTER TABLE notes ADD COLUMN timestamp INTEGER NOT NULL DEFAULT 0
+
+* Adds a new column called "timestamp"
+* Stores time in number format (Unix time)
+* Old notes will get default value 0
+
+4. Update old notes timestamp
+   SQL:
+   UPDATE notes SET timestamp = strftime('%s','now') WHERE timestamp = 0
+
+* Finds all notes where timestamp is 0
+* Sets current time using Unix timestamp
+* Fixes old data so every note has real time
+
+
+WHY DEFAULT 0 IS IMPORTANT:
+* Old database rows already exist
+* Without DEFAULT value, app will crash
+* DEFAULT 0 prevents errors during migration
+
+
+FINAL RESULT:
+
+Before:
+id, title, content
+
+After:
+id, title, content, color, timestamp
+
+Migration = safe database upgrade without deleting user data

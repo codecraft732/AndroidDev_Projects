@@ -23,14 +23,14 @@ object NetworkModule {
     fun provideHttpClient(): HttpClient{
         // http send network request
         return HttpClient(CIO) {
-//       ContentNegotiation  convert api response from Json to object
+        // ContentNegotiation  convert api response from Json to object
             install(ContentNegotiation) {
 
                 json(Json {
                     ignoreUnknownKeys = true
                     isLenient = true
                     prettyPrint = true
-                }
+                    }
                 )
             }
 
