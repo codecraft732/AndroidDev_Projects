@@ -49,16 +49,18 @@ com.example.mediaplayer
 ## 🖼️ Screenshots
 
 <p align="center">
- <img src="app/src/main/res/drawable/img3.jpeg" width="180">
+  <img src="app/src/main/res/drawable/img8.jpeg" width="180">
+  <img src="app/src/main/res/drawable/img3.jpeg" width="180">
   <img src="app/src/main/res/drawable/img4.jpeg" width="180">
   <img src="app/src/main/res/drawable/img5.jpeg" width="180">
-  <img src="app/src/main/res/drawable/img6.jpeg" width="180">
 </p>
 
 <p align="center">
+  <img src="app/src/main/res/drawable/img6.jpeg" width="180">
   <img src="app/src/main/res/drawable/img7.jpeg" width="180">
   <img src="app/src/main/res/drawable/img1.jpeg" width="180">
   <img src="app/src/main/res/drawable/img2.jpeg" width="180">
+  
 </p>
 
 ---
