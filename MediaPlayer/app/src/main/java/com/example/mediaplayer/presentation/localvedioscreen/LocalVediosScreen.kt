@@ -48,13 +48,19 @@ fun LocalVediosScreen(
     var pendingDeleteVideo by remember { mutableStateOf<LocalVedio?>(null) }
 
 
+    /*rememberLauncherForActivityResult → In Compose, you can't just say "show a popup and wait" like normal code
+     — Compose redraws the screen constantly, so it would forget what it was doing.
+     This function remembers a launcher across recompositions, so it doesn't get lost.*/
+
     val deleteLauncher = rememberLauncherForActivityResult(
-        contract = ActivityResultContracts.StartIntentSenderForResult()
+        contract = ActivityResultContracts.StartIntentSenderForResult()// here's a permission-style system dialog, not a normal screen
     ) { result ->
 
+      /* result.resultCode tells you what the user chose
+        RESULT_OK means "user tapped Allow"*/
         if (result.resultCode == Activity.RESULT_OK) {
 
-            pendingDeleteVideo?.let { video ->
+            pendingDeleteVideo?.let { video -> // note: "remember, we're deleting THIS one."  ..?.let { video }never touch a nullable variable without checking first.
                 scope.launch {
                     viewModel.removeVideoFromList(video)
                 }
@@ -170,11 +176,22 @@ fun LocalVediosScreen(
                     if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.R) {
 
                         try {
-                            val deleteRequest = MediaStore.createDeleteRequest(
+                            val deleteRequest = MediaStore.createDeleteRequest(//prepare a permission request to delete this list of files"
                                 context.contentResolver,
+
+                                  /*listOf(video.uri) → even though you're deleting one video, this function expects a list,
+                                 because it supports deleting multiple files at once
+                                  This doesn't delete anything yet — it just builds the request */
+
                                 listOf(video.uri)
                             )
                             pendingDeleteVideo = video
+
+                            /*IntentSenderRequest.Builder(...).build() →
+                        wraps the delete request into the exact format the launcher understands
+                        deleteLauncher.launch(...) → actually shows the system popup now. This is where Block 1's callback gets triggered
+                        — LATER, when the user responds.*/
+
                             deleteLauncher.launch(
                                 IntentSenderRequest.Builder(deleteRequest.intentSender).build()
                             )
@@ -190,6 +207,16 @@ fun LocalVediosScreen(
 
                         scope.launch {
                             try {
+
+                                /*withContext(Dispatchers.IO) → deleting a file is disk work, not UI work ->
+                                 this switches to a background thread built for I/O tasks, so the app doesn't freeze
+                                - contentResolver.delete(video.uri, null, null) →
+                                directly delete the file, no popup involved (older Android was less strict)
+
+                                - The two nulls are optional filter conditions —>
+                                 not needed here since you're deleting one exact file by its address
+                                > 0 → delete() returns how many rows were deleted. If it's more than 0, deletion succeeded.*/
+
                                 val deleted = withContext(Dispatchers.IO) {
                                     context.contentResolver.delete(video.uri, null, null) > 0
                                 }

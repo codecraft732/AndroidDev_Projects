@@ -15,11 +15,14 @@ Survives configuration changes (like screen rotation)
  */
 class VedioViewModel(private val repository: VedioRepository): ViewModel() {
 
+
     var localVedios by  mutableStateOf<List<LocalVedio>>(emptyList())
         private set  // Only this class can modify the list
 
+
     var isLoading by mutableStateOf(false)
         private set  // Only this class can modify loading state
+
 
 
     suspend fun loadlocalVedios(){
@@ -28,21 +31,24 @@ class VedioViewModel(private val repository: VedioRepository): ViewModel() {
         isLoading = false
     }
 
+
     fun getVideoUri(id: Long): Uri {
         return repository.getVediobyId(id)
     }
 
 
 
+
     suspend fun deleteVideo(video: LocalVedio): Boolean {
-        val success = repository.deleteVideo(video.uri)
+        val success = repository.deleteVideo(video.uri)//video.uri, the address of the file
 
         if (success) {
-            localVedios = localVedios.filter { it.id != video.id }
+            localVedios= localVedios.filter { it.id != video.id }//.filter { it.id != video.id } → "keep every video EXCEPT the one whose id matches the deleted one"
         }
-
         return success
     }
+
+
 
     fun removeVideoFromList(video: LocalVedio) {
         localVedios = localVedios.filter { it.id != video.id }

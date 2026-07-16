@@ -188,9 +188,3 @@ fun HomeScreen(navController: NavHostController) {
 
 
 
-
-@Preview(showSystemUi = true, showBackground = true)
-@Composable
-fun HomeScreenPreview() {
-    HomeScreen(navController = rememberNavController())
-}

@@ -124,3 +124,14 @@ Let's follow the **`vedioId`** to see how it moves through the files:
 *   **`LocalPlayerScreen.kt`**: The Theatre. It hosts the **ExoPlayer** to show the actual moving video.
 *   **`Routes.kt`**: The Map. It lists all the possible destinations in the app.
 
+
+
+
+## ContentResolver keyword — The Delivery Boy of Android
+Imagine your app doesn't own the videos on the phone. They live in a shared warehouse (device storage) that every app can access — Gallery, WhatsApp, your app, all of them.
+You can't just walk into the warehouse and grab/delete a video yourself. Android doesn't allow that directly for safety and permission reasons.
+So you send a delivery boy — that's ContentResolver. You give him a note (the video's Uri — think of it like an address), and he goes and does the job: fetch it, delete it, update it, whatever you asked.
+
+ContentResolver = the middleman between your app and Android's shared storage system (MediaStore, Contacts, Calendar, etc.)
+You never touch the file directly — you always go through this "resolver"
+That's why in your code, repository.deleteVideo(video.uri) is the layer that internally calls contentResolver.delete(uri, ...) to actually remove the video from storage
