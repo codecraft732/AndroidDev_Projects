@@ -1,4 +1,4 @@
-# Doc Scanner — README
+# Doc Scanner Using ML-KIT
 
 ## What This App Does
 1. User taps **"Scan Document"**
