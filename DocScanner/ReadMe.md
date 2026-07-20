@@ -46,12 +46,12 @@ Button click
 <p align="center">
   <img src="app/src/main/res/drawable/img0.jpeg" width="120">
   <img src="app/src/main/res/drawable/img1.jpeg" width="120">
-  <img src="app/src/main/res/drawable/img2.jpeg" width="120">
  <img src="app/src/main/res/drawable/img3.jpeg" width="120">
+  <img src="app/src/main/res/drawable/img4.jpeg" width="120">
 </p>
 
 <p align="center">
-  <img src="app/src/main/res/drawable/img4.jpeg" width="120">
+  <img src="app/src/main/res/drawable/img2.jpeg" width="120">
   <img src="app/src/main/res/drawable/img5.jpeg" width="120">
   <img src="app/src/main/res/drawable/img6.jpeg" width="120">
 </p>
