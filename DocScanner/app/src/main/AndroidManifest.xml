@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+        CAMERA permission:
+        Technically, Google's Document Scanner (GmsDocumentScanning) runs the camera
+        inside ITS OWN separate activity via Google Play Services — so your app doesn't
+        strictly need to request camera permission itself, the library handles it.
+        But some devices / reviewers expect it declared, so it's safe to include.
+    -->
+    <uses-feature
+        android:name="android.hardware.camera"
+        android:required="false" />
+    <uses-permission
+        android:name="android.permission.CAMERA" />
+
+    <!--
+        WRITE_EXTERNAL_STORAGE:
+        Only needed on Android 9 (API 28) and below.
+        From Android 10 (API 29) onward, MediaStore.insert() (used in MainActivity.kt)
+        does NOT need this permission to save your own app's files — that's the whole
+        point of "scoped storage". maxSdkVersion=28 means: request it on old phones,
+        ignore it on new ones.
+    -->
+    <uses-permission
+        android:name="android.permission.WRITE_EXTERNAL_STORAGE"
+        android:maxSdkVersion="28" />
+
+    <!--
+        READ_MEDIA_IMAGES:
+        Only relevant if you later add a feature to READ/pick existing images
+        (e.g. gallery import — note: GmsDocumentScanning's built-in gallery import
+        already handles its own permission internally, so this is only needed if
+        YOU write extra gallery-picking code outside the scanner).
+    -->
+    <uses-permission android:name="android.permission.READ_MEDIA_IMAGES" />
+
+
+
+    <application
+        android:allowBackup="true"
+        android:dataExtractionRules="@xml/data_extraction_rules"
+        android:fullBackupContent="@xml/backup_rules"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/Theme.Doc_Scanner">
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Doc_Scanner"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
