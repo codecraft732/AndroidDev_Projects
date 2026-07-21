@@ -14,10 +14,19 @@ import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.activity.result.*
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.*
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.RectangleShape
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.core.content.ContextCompat
 import com.example.doc_scanner.ui.theme.Doc_ScannerTheme
 import com.google.mlkit.vision.documentscanner.*
@@ -139,22 +148,53 @@ class MainActivity : ComponentActivity() {
                         horizontalAlignment = Alignment.CenterHorizontally
                     ) {
 
+                        Text(
+                            text= "Welcome to the Doc Scanner",
+                            style = MaterialTheme.typography.headlineLarge,
+                            fontWeight= FontWeight.Bold,
+                            fontFamily = FontFamily.Cursive
+                        )
 
-                        Button(onClick = {
-                            // Check permission FIRST. Only open the scanner if we
-                            // already have it — otherwise ask for it and stop here.
-                            val hasCameraPermission = ContextCompat.checkSelfPermission(
-                                this@MainActivity,
-                                Manifest.permission.CAMERA
-                            ) == PackageManager.PERMISSION_GRANTED
 
-                            if (hasCameraPermission) {
-                                launchScanner(scanner, scannerLauncher)
-                            } else {
-                                cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                        Column(
+                            modifier = Modifier.fillMaxWidth(),
+                            verticalArrangement = Arrangement.Bottom,
+                            horizontalAlignment = Alignment.CenterHorizontally
+                        ) {
+
+                            Button(onClick = {
+                                // Check permission FIRST. Only open the scanner if we
+                                // already have it — otherwise ask for it and stop here.
+                                val hasCameraPermission = ContextCompat.checkSelfPermission(
+                                    this@MainActivity,
+                                    Manifest.permission.CAMERA
+                                ) == PackageManager.PERMISSION_GRANTED
+
+                                if (hasCameraPermission) {
+                                    launchScanner(scanner, scannerLauncher)
+                                } else {
+                                    cameraPermissionLauncher.launch(Manifest.permission.CAMERA)
+                                }
+                                },
+                                modifier = Modifier.fillMaxWidth()
+                                .padding(vertical = 16.dp,horizontal= 24.dp)
+                                .background(
+                                    color = Color.Black,
+                                    shape = RectangleShape
+                                )
+                               , colors = ButtonDefaults.buttonColors(
+                                    containerColor = Color.Black,
+                                    disabledContentColor = Color.Black,
+                                   contentColor = Color.White
+                                )
+                                 ) {
+
+                                Text(
+                                    text = "Scan Document",
+                                    fontSize = 16.sp,
+                                    fontWeight = FontWeight.Bold
+                                )
                             }
-                        }) {
-                            Text(text = "Scan Document")
                         }
                     }
                 }
